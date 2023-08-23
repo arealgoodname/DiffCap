@@ -1,0 +1,83 @@
+data:
+    num_workers: 32
+    train_txt_dbs: ['']
+    train_img_dbs: ['']
+    val_txt_db: 'coco_val_uncased.db/'
+    val_img_db: 'mscoco/clip_img_feature'
+    pin_memory: True
+    small_set: False
+    small_train_size: 500
+    small_val_size: 100
+    one_to_one: False
+    dataset: else
+
+model:
+    feature_type: vit_cls
+    feature_dim: 512
+    condition_method: prefix # concat, add, prefix
+    dropout: 0.1
+    var_type: 'fixedlarge'
+    #ckpt_dir: "~/ddpm_ckpt/celeba/ckpt.pth"
+    predict_x_0: True
+    t_head: False
+    fix_len: True
+    max_len: 32
+    mean_type: 'start_x'
+    unconditional: False
+
+diffusion:
+    schedule_test: False
+    beta_schedule: sqrt
+    beta_start: 0.0001
+    beta_end: 0.02
+    num_diffusion_timesteps: 2000
+    rescale_timesteps: True
+
+training:
+    batch_size: 64
+    n_epochs: 50
+    #n_iters: 50000
+    snapshot_freq: 500
+    #validation_freq: 200
+    method: 'nofreeze'
+    encoder_reinit: True
+    resume_training: False
+    resume_pth: ""
+    fp16: False
+    use_bert_embedding: False
+    check_grad: False
+    warmup_steps: 0
+
+sampling:
+    batch_size: 50
+    last_only: True
+
+optim:
+    weight_decay: 0.000
+    optimizer: AdamW
+    lr: 0.0001
+    beta1: 0.9
+    amsgrad: false
+    eps: 0.00000001
+    grad_clip: -1.0
+    top_anneal: 100
+    repeat_times: 5
+    scheduler: Linear # CosineAnneal Linear Exp CosineAnnealWarm
+
+bert:
+    attention_probs_dropout_prob: 0.1
+    hidden_act: "gelu"
+    hidden_dropout_prob: 0.1
+    hidden_size: 768
+    initializer_range: 0.02
+    intermediate_size: 3072
+    max_position_embeddings: 512
+    num_attention_heads: 12
+    num_hidden_layers: 12
+    type_vocab_size: 2
+    vocab_size: 8016
+    txt_word_embeddings_path: ""
+    bert_encoder_path: ""
+    use_bert_tokenizer: False
+    vocab_dim: 256
+    vocab_pth: 'weights/coco_vocab.json'
